@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NOVA — Tienda online</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f7f7f8;color:#171717}
+header{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid #eee;padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:900;font-size:22px;letter-spacing:1px}.cart{border:0;background:#171717;color:#fff;border-radius:999px;padding:10px 15px;font-weight:700}
+.hero{padding:48px 20px;background:linear-gradient(135deg,#171717,#444);color:#fff}.hero h1{font-size:38px;line-height:1;margin:0 0 12px}.hero p{max-width:560px;color:#ddd}
+main{max-width:1050px;margin:auto;padding:28px 18px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.card{background:#fff;border:1px solid #e8e8e8;border-radius:18px;overflow:hidden;box-shadow:0 5px 20px #00000008}.pic{height:210px;display:grid;place-items:center;font-size:70px;background:#eee}.info{padding:16px}.name{font-weight:800;font-size:18px}.desc{color:#666;font-size:14px;min-height:42px}.price{font-size:21px;font-weight:900;margin:12px 0}.buy{width:100%;padding:12px;border:0;border-radius:10px;background:#171717;color:#fff;font-weight:800}
+footer{text-align:center;color:#777;padding:35px 15px;font-size:13px}.note{background:#fff7d6;padding:14px;border-radius:12px;margin:20px 0;font-size:14px}
+#modal{display:none;position:fixed;inset:0;background:#0008;z-index:10;align-items:flex-end;justify-content:center}.box{background:#fff;width:100%;max-width:560px;border-radius:22px 22px 0 0;padding:22px;max-height:85vh;overflow:auto}.close{float:right;border:0;background:#eee;border-radius:50%;width:34px;height:34px}
+.item{display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding:12px 0}.checkout{width:100%;padding:14px;border:0;border-radius:12px;background:#16a34a;color:#fff;font-weight:900;font-size:16px}
+</style>
+</head>
+<body>
+<header><div class="logo">NOVA</div><button class="cart" onclick="openCart()">🛒 Carrito (<span id="count">0</span>)</button></header>
+<section class="hero"><h1>Productos que te simplifican la vida.</h1><p>Descubre productos seleccionados para tu día a día. Compra fácil desde tu celular.</p></section>
+<main>
+<div class="note">🚚 <b>Envíos a Brasil</b> · Los tiempos y costos dependen del proveedor. Esta demo no procesa pagos reales.</div>
+<h2>Productos destacados</h2>
+<div class="grid" id="products"></div>
+</main>
+<footer>© 2026 NOVA · Tienda demo · Agrega aquí tus políticas, contacto y condiciones reales antes de vender.</footer>
+
+<div id="modal"><div class="box"><button class="close" onclick="closeCart()">×</button><h2>Tu carrito</h2><div id="cart"></div><h3 id="total"></h3><button class="checkout" onclick="alert('Demo: conecta aquí tu sistema de pago antes de aceptar pedidos reales.')">Continuar al pago</button></div></div>
+
+<script>
+const products=[
+{id:1,name:"Lámpara LED portátil",price:59.90,emoji:"💡",desc:"Compacta, práctica y recargable."},
+{id:2,name:"Botella térmica",price:79.90,emoji:"🥤",desc:"Ideal para llevar bebidas durante el día."},
+{id:3,name:"Soporte para celular",price:39.90,emoji:"📱",desc:"Ajustable para escritorio y videollamadas."},
+{id:4,name:"Organizador de escritorio",price:49.90,emoji:"🗂️",desc:"Mantén tus accesorios ordenados."}
+];
+let cart=[];
+function money(n){return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(n)}
+document.getElementById('products').innerHTML=products.map(p=>`<article class="card"><div class="pic">${p.emoji}</div><div class="info"><div class="name">${p.name}</div><p class="desc">${p.desc}</p><div class="price">${money(p.price)}</div><button class="buy" onclick="add(${p.id})">Adicionar ao carrinho</button></div></article>`).join('');
+function add(id){let p=products.find(x=>x.id===id);cart.push(p);render();openCart()}
+function render(){document.getElementById('count').textContent=cart.length;document.getElementById('cart').innerHTML=cart.length?cart.map((p,i)=>`<div class="item"><span>${p.emoji} ${p.name}</span><b>${money(p.price)}</b></div>`).join(''):'<p>Tu carrito está vacío.</p>';document.getElementById('total').textContent='Total: '+money(cart.reduce((a,p)=>a+p.price,0))}
+function openCart(){render();document.getElementById('modal').style.display='flex'}function closeCart(){document.getElementById('modal').style.display='none'}
+</script>
+</body>
+</html>
